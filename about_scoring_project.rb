@@ -31,7 +31,30 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 
 def score(dice)
   # You need to write this method
+  scoring = 0
+  dice = dice.sort!
+
+  dice.each do |dice_roll|
+     
+    if dice_roll.nil?
+      scoring = []
+    else
+      scoring += 50 if dice_roll == 5
+      scoring += 100 if dice_roll == 1 
+      scoring += 0 if dice_roll % 2 == 0
+      scoring += 1000 if dice_roll[0] == dice_roll[1] && dice_roll[1] == dice_roll[2] && dice_roll[1] == 1
+      #scoring += dice_roll * 100 if triples(dice) == dice_roll * 3
+    end
+  end
+  scoring    
 end
+
+# def triples(dice)
+#   if dice.size() == 3
+#     sum = dice.inject{|sum, x| sum + x }
+#     sum
+#   end
+# end
 
 class AboutScoringProject < EdgeCase::Koan
   def test_score_of_an_empty_list_is_zero
