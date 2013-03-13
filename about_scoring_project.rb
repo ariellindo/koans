@@ -33,24 +33,43 @@ def score(dice)
   # You need to write this method
   scoring = 0
   dice = dice.sort!
+  first_three = dice.take(3)
 
   dice.each do |dice_roll|
-     
-    if dice_roll.nil?
+    if dice_roll.nil? 
       scoring = []
     else
       scoring += 50 if dice_roll == 5
       scoring += 100 if dice_roll == 1 && dice.size() < 3
       scoring += 100 if dice_roll == 1 && dice.size() > 3
-      scoring += 0 if dice_roll % 2 == 0
-      scoring = 1000 if dice_roll == 1 && dice.size() == 3
+      scoring += 0 if dice_roll >= 2 && dice_roll <= 4 || dice_roll == 6
+    end
 
-      scoring += dice_roll * 100  if dice_roll == 2 && dice.size() == 3
+    if first_three.inject {|sum, x| sum + x} / 3 == 1 && first_three.size() == 3
+      scoring = 1000
+    elsif is_triples?(first_three) && first_three.inject {|sum, x| sum + x} / 3 == 2
+      scoring = 200
+    elsif is_triples?(first_three) && first_three.inject {|sum, x| sum + x} / 3 == 3
+      scoring = 300
+    elsif is_triples?(first_three) && first_three.inject {|sum, x| sum + x} / 3 == 4
+      scoring = 400
+    elsif is_triples?(first_three) && first_three.inject {|sum, x| sum + x} / 3 == 5
+      scoring = 500
+    elsif is_triples?(first_three) && first_three.inject {|sum, x| sum + x} / 3 == 6
+      scoring = 600
+    end
+
+    if dice.size > first_three.size && is_triples?(first_three)
+      scoring += 50 if dice_roll == 5
+      scoring += 0 if dice_roll >= 2 && dice_roll <= 4 || dice_roll == 6
     end
   end
   scoring    
 end
 
+def is_triples?(num)
+  num[0] == num[1] && num[1] == num[2]? true : false
+end
 
 class AboutScoringProject < EdgeCase::Koan
   def test_score_of_an_empty_list_is_zero
